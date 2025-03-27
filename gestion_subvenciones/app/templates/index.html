@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Listado de Subvenciones</title>
+</head>
+<body>
+    <h1>Listado de Subvenciones</h1>
+
+    <a href="{{ url_for('main.nueva_subvencion') }}">➕ Nueva subvención</a>
+
+    <table border="1" cellpadding="5" cellspacing="0">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nº Expediente</th>
+                <th>Entidad</th>
+                <th>Concepto</th>
+                <th>Fecha solicitud</th>
+                <th>Estado</th>
+                <th>Fondos propios</th>
+                <th>Importe solicitado</th>
+                <th>Importe concedido</th>
+                <th>Importe pagado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for s in subvenciones %}
+            <tr>
+                <td>{{ s.id }}</td>
+                <td>{{ s.num_expediente }}</td>
+                <td>{{ s.entidad }}</td>
+                <td>{{ s.concepto }}</td>
+                <td>{{ s.fecha_solicitud }}</td>
+                <td>{{ s.estado }}</td>
+                <td>{{ "Sí" if s.fondos_propios else "No" }}</td>
+                <td>{{ s.importe_solicitado }}</td>
+                <td>{{ s.importe_concedido }}</td>
+                <td>{{ s.importe_pagado }}</td>
+                <td>
+                    <a href="{{ url_for('main.editar_subvencion', id=s.id) }}">✏️ Editar</a> |
+                    <a href="{{ url_for('main.eliminar_subvencion', id=s.id) }}">🗑️ Eliminar</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

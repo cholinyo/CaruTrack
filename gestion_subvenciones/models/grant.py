@@ -1,0 +1,26 @@
+# models/grant.py
+from app import db
+
+class Grant(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    expediente_opensea = db.Column(db.String(100), nullable=False)
+    fecha_solicitud = db.Column(db.Date, nullable=False)
+    expediente_subvencion = db.Column(db.String(100), nullable=False)
+    fondos_propios = db.Column(db.Boolean, nullable=False)
+    entidad = db.Column(db.String(100), nullable=False)
+    importe_solicitado = db.Column(db.Float, nullable=False)
+    concepto = db.Column(db.String(255), nullable=False)
+    importe_concedido = db.Column(db.Float, nullable=False)
+    tipo_fondo = db.Column(db.String(100), nullable=False)
+    importe_pagado = db.Column(db.Float, nullable=False)
+    publicacion_resolucion = db.Column(db.String(255), nullable=False)
+    porcentaje_financiado = db.Column(db.Float, nullable=False)
+    plazo_justificacion = db.Column(db.Date, nullable=False)
+    justificado = db.Column(db.Boolean, nullable=False)
+    departamento_solicitante = db.Column(db.String(100), nullable=False)
+    justificacion = db.Column(db.Text, nullable=False)
+    redes_vinculadas = db.Column(db.String(255), nullable=False)
+    entidades = db.Column(db.String(255), nullable=False)
+    tipos_fondos = db.Column(db.String(255), nullable=False)
+    tipos_planes = db.Column(db.String(255), nullable=False)
+    tipos_redes = db.Column(db.String(255), nullable=False)

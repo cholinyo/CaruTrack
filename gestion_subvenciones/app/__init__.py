@@ -9,6 +9,8 @@ login_manager = LoginManager()
 login_manager.login_view = 'main.login'
 migrate = Migrate()
 
+
+
 def create_app():
     app = Flask(__name__)
     app.config.from_object('config.Config')

@@ -1,27 +1,19 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Nueva Subvención</title>
-</head>
-<body>
-    <h1>Nueva Subvención</h1>
-    <form method="POST">
-        <label>Expediente OPENSEA:<br><input type="text" name="expediente_opensea"></label><br>
-        <label>Expediente Subvención:<br><input type="text" name="expediente_subvencion"></label><br>
-        <label>Entidad:<br><input type="text" name="entidad"></label><br>
-        <label>Concepto:<br><input type="text" name="concepto"></label><br>
-        <label>Tipo de Fondo:<br><input type="text" name="tipo_fondo"></label><br>
-        <label>Fecha Solicitud:<br><input type="date" name="fecha_solicitud"></label><br>
-        <label>Estado:<br><input type="text" name="estado"></label><br>
-        <label>Fondos Propios:<br><input type="text" name="fondos_propios"></label><br>
-        <label>Importe Solicitado:<br><input type="number" step="0.01" name="importe_solicitado"></label><br>
-        <label>Importe Concedido:<br><input type="number" step="0.01" name="importe_concedido"></label><br>
-        <label>Importe Pagado:<br><input type="number" step="0.01" name="importe_pagado"></label><br>
-        <label>Observaciones:<br><textarea name="observaciones"></textarea></label><br>
-
-        <button type="submit">Guardar</button>
-        <a href="{{ url_for('main.index') }}">Cancelar</a>
-    </form>
-</body>
-</html>
+{% extends "base.html" %}
+{% block title %}Nueva Subvención{% endblock %}
+{% block content %}
+<h1 class="mb-4">Nueva Subvención</h1>
+<form method="POST">
+    {% for field in ['expediente_opensea', 'expediente_subvencion', 'entidad', 'concepto', 'tipo_fondo', 'fecha_solicitud', 'estado', 'fondos_propios', 'importe_solicitado', 'importe_concedido', 'importe_pagado'] %}
+        <div class="mb-3">
+            <label class="form-label">{{ field.replace('_', ' ').capitalize() }}</label>
+            <input type="{{ 'date' if field == 'fecha_solicitud' else 'text' }}" name="{{ field }}" class="form-control">
+        </div>
+    {% endfor %}
+    <div class="mb-3">
+        <label class="form-label">Observaciones</label>
+        <textarea name="observaciones" class="form-control"></textarea>
+    </div>
+    <button type="submit" class="btn btn-success">Guardar</button>
+    <a href="{{ url_for('main.index') }}" class="btn btn-secondary">Cancelar</a>
+</form>
+{% endblock %}

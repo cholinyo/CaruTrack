@@ -1,42 +1,19 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Editar subvención</title>
-</head>
-<body>
-    <h1>Editar subvención</h1>
-    <form method="POST">
-        <label>Nº Expediente:</label><br>
-        <input type="text" name="num_expediente" value="{{ subv.num_expediente }}"><br>
-
-        <label>Entidad:</label><br>
-        <input type="text" name="entidad" value="{{ subv.entidad }}"><br>
-
-        <label>Concepto:</label><br>
-        <input type="text" name="concepto" value="{{ subv.concepto }}"><br>
-
-        <label>Fecha de solicitud:</label><br>
-        <input type="date" name="fecha_solicitud" value="{{ subv.fecha_solicitud }}"><br>
-
-        <label>Estado:</label><br>
-        <input type="text" name="estado" value="{{ subv.estado }}"><br>
-
-        <label>Fondos propios:</label><br>
-        <input type="checkbox" name="fondos_propios" {% if subv.fondos_propios %}checked{% endif %}><br>
-
-        <label>Importe solicitado:</label><br>
-        <input type="number" step="0.01" name="importe_solicitado" value="{{ subv.importe_solicitado }}"><br>
-
-        <label>Importe concedido:</label><br>
-        <input type="number" step="0.01" name="importe_concedido" value="{{ subv.importe_concedido }}"><br>
-
-        <label>Importe pagado:</label><br>
-        <input type="number" step="0.01" name="importe_pagado" value="{{ subv.importe_pagado }}"><br><br>
-
-        <input type="submit" value="Guardar cambios">
-    </form>
-
-    <a href="{{ url_for('main.index') }}">Volver al listado</a>
-</body>
-</html>
+{% extends "base.html" %}
+{% block title %}Editar Subvención{% endblock %}
+{% block content %}
+<h1 class="mb-4">Editar Subvención</h1>
+<form method="POST">
+    {% for field in ['expediente_opensea', 'expediente_subvencion', 'entidad', 'concepto', 'tipo_fondo', 'fecha_solicitud', 'estado', 'fondos_propios', 'importe_solicitado', 'importe_concedido', 'importe_pagado'] %}
+        <div class="mb-3">
+            <label class="form-label">{{ field.replace('_', ' ').capitalize() }}</label>
+            <input type="{{ 'date' if field == 'fecha_solicitud' else 'text' }}" name="{{ field }}" value="{{ subv[field] if field != 'fecha_solicitud' else subv.fecha_solicitud }}" class="form-control">
+        </div>
+    {% endfor %}
+    <div class="mb-3">
+        <label class="form-label">Observaciones</label>
+        <textarea name="observaciones" class="form-control">{{ subv.observaciones }}</textarea>
+    </div>
+    <button type="submit" class="btn btn-warning">Actualizar</button>
+    <a href="{{ url_for('main.index') }}" class="btn btn-secondary">Cancelar</a>
+</form>
+{% endblock %}

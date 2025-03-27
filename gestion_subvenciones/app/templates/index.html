@@ -2,49 +2,83 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Listado de Subvenciones</title>
+    <title>Subvenciones</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <h1>Listado de Subvenciones</h1>
+<div class="container py-5">
+    <h1 class="mb-4">Listado de Subvenciones</h1>
 
-    <a href="{{ url_for('main.nueva_subvencion') }}">➕ Nueva subvención</a>
+    <div class="d-flex justify-content-between mb-4">
+        <a href="{{ url_for('main.nueva_subvencion') }}" class="btn btn-success">➕ Nueva subvención</a>
+        <a href="{{ url_for('main.logout') }}" class="btn btn-outline-secondary">🔒 Cerrar sesión</a>
+    </div>
 
-    <table border="1" cellpadding="5" cellspacing="0">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Nº Expediente</th>
-                <th>Entidad</th>
-                <th>Concepto</th>
-                <th>Fecha solicitud</th>
-                <th>Estado</th>
-                <th>Fondos propios</th>
-                <th>Importe solicitado</th>
-                <th>Importe concedido</th>
-                <th>Importe pagado</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for s in subvenciones %}
-            <tr>
-                <td>{{ s.id }}</td>
-                <td>{{ s.num_expediente }}</td>
-                <td>{{ s.entidad }}</td>
-                <td>{{ s.concepto }}</td>
-                <td>{{ s.fecha_solicitud }}</td>
-                <td>{{ s.estado }}</td>
-                <td>{{ "Sí" if s.fondos_propios else "No" }}</td>
-                <td>{{ s.importe_solicitado }}</td>
-                <td>{{ s.importe_concedido }}</td>
-                <td>{{ s.importe_pagado }}</td>
-                <td>
-                    <a href="{{ url_for('main.editar_subvencion', id=s.id) }}">✏️ Editar</a> |
-                    <a href="{{ url_for('main.eliminar_subvencion', id=s.id) }}">🗑️ Eliminar</a>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <form method="get" class="row g-3 mb-4">
+        <div class="col-md-4">
+            <label class="form-label">Entidad</label>
+            <input type="text" name="entidad" class="form-control" value="{{ entidad }}">
+        </div>
+        <div class="col-md-2">
+            <label class="form-label">Año</label>
+            <input type="text" name="año" class="form-control" value="{{ año }}">
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Estado</label>
+            <select name="estado" class="form-select">
+                <option value="">-- Todos --</option>
+                {% for e in estados %}
+                    <option value="{{ e }}" {% if estado == e %}selected{% endif %}>{{ e }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-2 d-flex align-items-end">
+            <button type="submit" class="btn btn-primary me-2">🔍 Buscar</button>
+            <a href="{{ url_for('main.index') }}" class="btn btn-outline-secondary">Limpiar</a>
+        </div>
+    </form>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Expediente</th>
+                    <th>Entidad</th>
+                    <th>Concepto</th>
+                    <th>Fecha</th>
+                    <th>Estado</th>
+                    <th>Importe solicitado</th>
+                    <th>Importe concedido</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for s in subvenciones %}
+                <tr>
+                    <td>{{ s.id }}</td>
+                    <td>{{ s.expediente_subvencion }}</td>
+                    <td>{{ s.entidad }}</td>
+                    <td>{{ s.concepto }}</td>
+                    <td>{{ s.fecha_solicitud }}</td>
+                    <td>{{ s.estado }}</td>
+                    <td>{{ s.importe_solicitado }}</td>
+                    <td>{{ s.importe_concedido }}</td>
+                    <td>
+                        <a href="{{ url_for('main.editar_subvencion', id=s.id) }}" class="btn btn-sm btn-warning">✏️ Editar</a>
+                        <a href="{{ url_for('main.eliminar_subvencion', id=s.id) }}" class="btn btn-sm btn-danger">🗑️ Eliminar</a>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="9" class="text-center">No se encontraron subvenciones.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

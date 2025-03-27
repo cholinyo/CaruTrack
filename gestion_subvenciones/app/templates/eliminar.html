@@ -1,18 +1,12 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Eliminar subvención</title>
-</head>
-<body>
-    <h1>Eliminar subvención</h1>
-
-    <p>¿Estás seguro de que deseas eliminar la subvención con expediente <strong>{{ subv.num_expediente }}</strong>?</p>
-
+{% extends "base.html" %}
+{% block title %}Eliminar Subvención{% endblock %}
+{% block content %}
+<div class="text-center">
+    <h1 class="mb-4">Eliminar Subvención</h1>
+    <p>¿Estás seguro de que quieres eliminar la subvención de <strong>{{ subv.entidad }}</strong>?</p>
     <form method="POST">
-        <input type="submit" value="Sí, eliminar">
+        <button type="submit" class="btn btn-danger">Eliminar</button>
+        <a href="{{ url_for('main.index') }}" class="btn btn-secondary">Cancelar</a>
     </form>
-
-    <a href="{{ url_for('main.index') }}">Cancelar</a>
-</body>
-</html>
+</div>
+{% endblock %}

@@ -11,8 +11,32 @@ bcrypt = Bcrypt()
 @main.route('/')
 @login_required
 def index():
-    subvenciones = Subvencion.query.all()
-    return render_template('index.html', subvenciones=subvenciones)
+    query = Subvencion.query
+
+    entidad = request.args.get('entidad', '').strip()
+    estado = request.args.get('estado', '').strip()
+    año = request.args.get('año', '').strip()
+
+    if entidad:
+        query = query.filter(Subvencion.entidad.ilike(f"%{entidad}%"))
+    if estado:
+        query = query.filter(Subvencion.estado == estado)
+    if año.isdigit():
+        query = query.filter(db.extract('year', Subvencion.fecha_solicitud) == int(año))
+
+    subvenciones = query.all()
+
+    # Extraer todos los estados distintos para el desplegable
+    estados_distintos = db.session.query(Subvencion.estado).distinct().order_by(Subvencion.estado).all()
+    estados = [e.estado for e in estados_distintos if e.estado]
+
+    return render_template('index.html',
+                           subvenciones=subvenciones,
+                           entidad=entidad,
+                           estado=estado,
+                           año=año,
+                           estados=estados)
+
 
 # RUTA: Crear nueva subvención (requiere login)
 @main.route('/nueva', methods=['GET', 'POST'])

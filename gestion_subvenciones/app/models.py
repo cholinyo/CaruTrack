@@ -1,31 +1,30 @@
-from . import db
-from datetime import date
+from flask_sqlalchemy import SQLAlchemy
+from flask_login import UserMixin
+
+db = SQLAlchemy()
 
 class Subvencion(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-
-    # Identificadores
     expediente_opensea = db.Column(db.String(50))
     expediente_subvencion = db.Column(db.String(50))
-
-    # Información básica
     entidad = db.Column(db.String(150))
     concepto = db.Column(db.String(250))
     tipo_fondo = db.Column(db.String(100))
-
-    # Fechas y estado
     fecha_solicitud = db.Column(db.Date)
     estado = db.Column(db.String(100))
-
-    # Información económica
     fondos_propios = db.Column(db.String(10))
     importe_solicitado = db.Column(db.Float)
     importe_concedido = db.Column(db.Float)
     importe_pagado = db.Column(db.Float)
-
-    # Trazabilidad
     observaciones = db.Column(db.Text)
 
     def __repr__(self):
         return f"<Subvencion {self.expediente_subvencion} - {self.entidad}>"
 
+class Usuario(UserMixin, db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), unique=True, nullable=False)
+    password_hash = db.Column(db.String(128), nullable=False)
+
+    def __repr__(self):
+        return f"<Usuario {self.username}>"

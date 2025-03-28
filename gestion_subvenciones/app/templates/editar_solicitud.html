@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}Editar Solicitud{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Editar Solicitud de Subvención</h2>
+
+    {% if bloqueada %}
+        <div class="alert alert-warning">
+            Esta solicitud está bloqueada y no puede editarse.
+        </div>
+    {% endif %}
+
+    <form method="POST">
+        <div class="mb-3">
+            <label class="form-label">Entidad</label>
+            <input type="text" name="entidad" class="form-control" value="{{ solicitud.entidad }}" {% if bloqueada %}disabled{% endif %}>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Concepto</label>
+            <input type="text" name="concepto" class="form-control" value="{{ solicitud.concepto }}" {% if bloqueada %}disabled{% endif %}>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Tipo de Fondo</label>
+            <input type="text" name="tipo_fondo" class="form-control" value="{{ solicitud.tipo_fondo }}" {% if bloqueada %}disabled{% endif %}>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Fecha de Solicitud</label>
+            <input type="date" name="fecha_solicitud" class="form-control"
+                value="{{ solicitud.fecha_solicitud.strftime('%Y-%m-%d') if solicitud.fecha_solicitud }}" {% if bloqueada %}disabled{% endif %}>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Estado</label>
+            <select name="estado" class="form-select" {% if bloqueada %}disabled{% endif %}>
+                {% for estado in estados %}
+                    <option value="{{ estado }}" {% if solicitud.estado == estado %}selected{% endif %}>{{ estado }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Importe Estimado (€)</label>
+            <input type="number" step="0.01" name="importe_estimado" class="form-control" value="{{ solicitud.importe_estimado or '' }}" {% if bloqueada %}disabled{% endif %}>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Observaciones</label>
+            <textarea name="observaciones" class="form-control" {% if bloqueada %}disabled{% endif %}>{{ solicitud.observaciones }}</textarea>
+        </div>
+
+        <div class="form-check mb-3">
+            <input class="form-check-input" type="checkbox" name="documentacion_adjunta" id="documentacion_adjunta"
+                {% if solicitud.documentacion_adjunta %}checked{% endif %} {% if bloqueada %}disabled{% endif %}>
+            <label class="form-check-label" for="documentacion_adjunta">Documentación Adjunta</label>
+        </div>
+
+        {% if solicitud.estado == "Denegada" and not bloqueada %}
+            <div class="mb-3">
+                <label class="form-label">Motivo de la denegación</label>
+                <textarea name="motivo_denegacion" class="form-control"></textarea>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Resolución</label>
+                <textarea name="resolucion" class="form-control"></textarea>
+            </div>
+        {% endif %}
+
+        {% if not bloqueada %}
+        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+        {% endif %}
+        <a href="{{ url_for('main.listar_solicitudes') }}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

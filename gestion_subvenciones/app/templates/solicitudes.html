@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}Solicitudes de Subvención{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Solicitudes de Subvención</h2>
+
+<a href="{{ url_for('main.nueva_solicitud') }}" class="btn btn-primary mb-3">➕ Nueva solicitud</a>
+
+<table class="table table-bordered table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>Entidad</th>
+            <th>Concepto</th>
+            <th>Tipo de fondo</th>
+            <th>Fecha de solicitud</th>
+            <th>Estado</th>
+            <th>Importe estimado</th>
+            <th>Documentación</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for s in solicitudes %}
+        <tr class="{% if s.bloqueada %}table-secondary{% endif %}">
+            <td>{{ s.entidad }}</td>
+            <td>{{ s.concepto }}</td>
+            <td>{{ s.tipo_fondo }}</td>
+            <td>{{ s.fecha_solicitud.strftime('%d/%m/%Y') if s.fecha_solicitud }}</td>
+            <td>{{ s.estado }}</td>
+            <td>{{ "{:,.2f}".format(s.importe_estimado or 0) }} €</td>
+            <td>
+                {% if s.documentacion_adjunta %}
+                    <span class="badge bg-success">Sí</span>
+                {% else %}
+                    <span class="badge bg-secondary">No</span>
+                {% endif %}
+            </td>
+            <td>
+                <a href="{{ url_for('main.editar_solicitud', id=s.id) }}" class="btn btn-sm btn-warning">✏️ Editar</a>
+                <a href="{{ url_for('main.eliminar_solicitud', id=s.id) }}" class="btn btn-sm btn-danger"
+                   onclick="return confirm('¿Estás seguro de que quieres eliminar esta solicitud?')">🗑️ Eliminar</a>
+                <a href="{{ url_for('main.ver_historial', id=s.id) }}" class="btn btn-sm btn-info">🕓 Historial</a>
+            </td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="8" class="text-center">No hay solicitudes registradas.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

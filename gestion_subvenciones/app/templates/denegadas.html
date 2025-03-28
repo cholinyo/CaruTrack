@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Subvenciones Denegadas{% endblock %}
+
+{% block content %}
+<h2>Subvenciones Denegadas</h2>
+
+<table class="table table-bordered table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>Entidad</th>
+            <th>Concepto</th>
+            <th>Tipo de Fondo</th>
+            <th>Fecha</th>
+            <th>Importe Estimado</th>
+            <th>Motivo</th>
+            <th>Resolución</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for s in denegadas %}
+        <tr>
+            <td>{{ s.entidad }}</td>
+            <td>{{ s.concepto }}</td>
+            <td>{{ s.tipo_fondo }}</td>
+            <td>{{ s.fecha_solicitud.strftime('%Y-%m-%d') if s.fecha_solicitud }}</td>
+            <td>{{ "{:,.2f}".format(s.importe_estimado or 0) }} €</td>
+            <td>{{ s.motivo_denegacion }}</td>
+            <td>{{ s.resolucion }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="7" class="text-center">No hay subvenciones denegadas registradas.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<a href="{{ url_for('main.index') }}" class="btn btn-secondary">Volver</a>
+{% endblock %}

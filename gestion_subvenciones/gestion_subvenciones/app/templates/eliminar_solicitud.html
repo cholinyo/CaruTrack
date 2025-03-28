@@ -1,0 +1,11 @@
+﻿{% extends 'base.html' %}
+{% block title %}Eliminar Solicitud{% endblock %}
+{% block content %}
+<h2>Â¿EstÃ¡s seguro de que quieres eliminar esta solicitud?</h2>
+<p><strong>Entidad:</strong> {{ solicitud.entidad }}</p>
+<p><strong>Concepto:</strong> {{ solicitud.concepto }}</p>
+<form method="POST">
+    <button type="submit" class="btn btn-danger">SÃ­, eliminar</button>
+    <a href="{{ url_for('main.listar_solicitudes') }}" class="btn btn-secondary">Cancelar</a>
+</form>
+{% endblock %}

@@ -1,0 +1,16 @@
+﻿{% extends 'base.html' %}
+{% block title %}Historial - Solicitud{% endblock %}
+{% block content %}
+<h2>Historial de cambios para la solicitud de {{ solicitud.entidad }}</h2>
+<ul class="list-group mt-3">
+    {% for item in historial %}
+        <li class="list-group-item">
+            <strong>{{ item.fecha.strftime('%d/%m/%Y %H:%M') }}</strong> - 
+            {{ item.usuario }}: {{ item.descripcion }}
+        </li>
+    {% else %}
+        <li class="list-group-item text-muted">No hay registros en el historial.</li>
+    {% endfor %}
+</ul>
+<a href="{{ url_for('main.listar_solicitudes') }}" class="btn btn-secondary mt-3">Volver</a>
+{% endblock %}

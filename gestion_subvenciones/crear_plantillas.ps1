@@ -1,10 +1,8 @@
-# Crear el directorio si no existe
-$templatesPath = "gestion_subvenciones\app\templates"
+$templatesPath = "app\templates"
 if (-Not (Test-Path $templatesPath)) {
     New-Item -Path $templatesPath -ItemType Directory -Force
 }
 
-# Crear historial_solicitud.html
 $historialContent = @"
 {% extends 'base.html' %}
 {% block title %}Historial - Solicitud{% endblock %}
@@ -13,7 +11,7 @@ $historialContent = @"
 <ul class="list-group mt-3">
     {% for item in historial %}
         <li class="list-group-item">
-            <strong>{{ item.fecha.strftime('%d/%m/%Y %H:%M') }}</strong> - 
+            <strong>{{ item.fecha.strftime('%d/%m/%Y %H:%M') }}</strong> -
             {{ item.usuario }}: {{ item.descripcion }}
         </li>
     {% else %}
@@ -26,7 +24,6 @@ $historialContent = @"
 $historialPath = Join-Path $templatesPath "historial_solicitud.html"
 $historialContent | Out-File -FilePath $historialPath -Encoding utf8
 
-# Crear eliminar_solicitud.html
 $eliminarContent = @"
 {% extends 'base.html' %}
 {% block title %}Eliminar Solicitud{% endblock %}
@@ -43,4 +40,4 @@ $eliminarContent = @"
 $eliminarPath = Join-Path $templatesPath "eliminar_solicitud.html"
 $eliminarContent | Out-File -FilePath $eliminarPath -Encoding utf8
 
-Write-Host "Archivos de plantilla creados correctamente en $templatesPath"
+Write-Host "Plantillas creadas correctamente en $templatesPath"

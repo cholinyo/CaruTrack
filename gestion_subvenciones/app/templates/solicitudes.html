@@ -37,7 +37,7 @@
             </td>
             <td>
                 <a href="{{ url_for('main.editar_solicitud', id=s.id) }}" class="btn btn-sm btn-warning">✏️ Editar</a>
-                <a href="{{ url_for('main.eliminar_solicitud', id=s.id) }}" class="btn btn-sm btn-danger"
+ <!--               <a href="{{ url_for('main.eliminar_solicitud', id=s.id) }}" class="btn btn-sm btn-danger" -->
                    onclick="return confirm('¿Estás seguro de que quieres eliminar esta solicitud?')">🗑️ Eliminar</a>
                 <a href="{{ url_for('main.ver_historial', id=s.id) }}" class="btn btn-sm btn-info">🕓 Historial</a>
             </td>

@@ -1,0 +1,23 @@
+﻿{% extends "base.html" %}
+{% block title %}Historial de Solicitud{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Historial de cambios - Solicitud ID {{ solicitud.id }}</h2>
+
+    {% if historial %}
+        <ul class="list-group mt-4">
+            {% for entrada in historial %}
+                <li class="list-group-item">
+                    <strong>{{ entrada.fecha.strftime('%d/%m/%Y %H:%M') }}</strong> - 
+                    {{ entrada.usuario }}<br>
+                    <small class="text-muted">{{ entrada.descripcion }}</small>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <div class="alert alert-info mt-4">No hay historial disponible para esta solicitud.</div>
+    {% endif %}
+
+    <a href="{{ url_for('main.listar_solicitudes') }}" class="btn btn-secondary mt-4">Volver</a>
+</div>
+{% endblock %}

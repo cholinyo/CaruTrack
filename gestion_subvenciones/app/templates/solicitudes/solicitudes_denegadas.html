@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+  <h2>Solicitudes Denegadas</h2>
+  <table class="table table-bordered table-hover">
+    <thead class="table-light">
+      <tr>
+        <th>Entidad</th>
+        <th>Concepto</th>
+        <th>Tipo de Fondo</th>
+        <th>Fecha Solicitud</th>
+        <th>Importe Total</th>
+        <th>Importe Subvencionado</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for s in solicitudes %}
+      <tr>
+        <td>{{ s.entidad.nombre if s.entidad else '' }}</td>
+        <td>{{ s.concepto }}</td>
+        <td>{{ s.tipo_fondo }}</td>
+        <td>{{ s.fecha_solicitud.strftime('%Y-%m-%d') if s.fecha_solicitud else '' }}</td>
+        <td>{{ "{:.2f}".format(s.importe_estimado) }} €</td>
+        <td>{{ "{:.2f}".format(s.importe_subvencionado) }} €</td>
+        <td>
+          <a href="{{ url_for('main.editar_solicitud', id=s.id) }}" class="btn btn-sm btn-primary">Editar</a>
+          <a href="{{ url_for('main.ver_historial_solicitud', id=s.id) }}" class="btn btn-sm btn-secondary">Historial</a>
+        </td>
+      </tr>
+      {% else %}
+      <tr>
+        <td colspan="7" class="text-center">No hay solicitudes denegadas.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

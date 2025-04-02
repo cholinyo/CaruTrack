@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Entidades registradas</h2>
+<a href="{{ url_for('entidades_bp.nueva_entidad') }}" class="btn btn-success mb-3">+ Nueva entidad</a>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Ámbito</th>
+            <th>Contactos</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for entidad in entidades %}
+        <tr>
+            <td>{{ entidad.nombre }}</td>
+            <td>{{ entidad.ambito }}</td>
+            <td>
+                {% for contacto in entidad.contactos %}
+                    <div><strong>{{ contacto.cargo }}</strong>: {{ contacto.nombre }} ({{ contacto.telefono }} / {{ contacto.email }})</div>
+                {% endfor %}
+            </td>
+            <td>
+                <a href="{{ url_for('entidades_bp.editar_entidad', id=entidad.id) }}" class="btn btn-sm btn-primary">Editar</a>
+                <form action="{{ url_for('entidades_bp.eliminar_entidad', id=entidad.id) }}" method="post" style="display:inline;">
+                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Estás seguro de eliminar esta entidad?')">Eliminar</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

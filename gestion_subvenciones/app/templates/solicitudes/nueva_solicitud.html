@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+  <h2>Nueva Solicitud de Subvención</h2>
+  <form method="post">
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label>Expediente OpenSea</label>
+        <input type="text" name="expediente_opensea" class="form-control">
+      </div>
+      <div class="col-md-6 mb-3">
+        <label>Expediente Subvención</label>
+        <input type="text" name="expediente_subvencion" class="form-control">
+      </div>
+      <div class="col-md-6 mb-3">
+        <label>Entidad a la que se solicita</label>
+        <select name="entidad_id" class="form-select">
+          {% for entidad in entidades %}
+          <option value="{{ entidad.id }}">{{ entidad.nombre }} ({{ entidad.ambito }})</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-6 mb-3">
+        <label>Concepto / Objeto</label>
+        <input type="text" name="concepto" class="form-control">
+      </div>
+      <div class="col-md-6 mb-3">
+        <label>Tipo/Naturaleza del Fondo</label>
+        <select name="tipo_fondo" class="form-select">
+          <option value="Fondos Europeos">Fondos Europeos</option>
+          <option value="Fondos Nacionales">Fondos Nacionales</option>
+          <option value="Fondos Autonómicos">Fondos Autonómicos</option>
+          <option value="Fondos Provinciales">Fondos Provinciales</option>
+          <option value="Otros">Otros</option>
+        </select>
+      </div>
+      <div class="col-md-6 mb-3">
+        <label>Fecha de Presentación</label>
+        <input type="date" name="fecha_presentacion_solicitud" class="form-control">
+      </div>
+      <div class="col-md-4 mb-3">
+        <label>Importe Total del Proyecto (€)</label>
+        <input type="number" name="importe_total" step="0.01" class="form-control">
+      </div>
+      <div class="col-md-4 mb-3">
+        <label>Importe Subvencionado (€)</label>
+        <input type="number" name="importe_subvencionado" step="0.01" class="form-control">
+      </div>
+      <div class="col-md-4 mb-3">
+        <label>Aportación Fondos Propios (€)</label>
+        <input type="number" name="fondos_propios" step="0.01" class="form-control">
+      </div>
+      <div class="col-md-12 mb-3">
+        <label>Documentación Requerida</label>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="doc_inicio_expediente" id="doc1">
+          <label class="form-check-label" for="doc1">Inicio de expediente</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="doc_informe_tecnico" id="doc2">
+          <label class="form-check-label" for="doc2">Informe técnico</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="doc_propuesta_jgl" id="doc3">
+          <label class="form-check-label" for="doc3">Propuesta JGL / Decreto</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="doc_ficha_captacion" id="doc4">
+          <label class="form-check-label" for="doc4">Ficha Departamento Captación de fondos</label>
+        </div>
+      </div>
+      <div class="col-md-12 mb-3">
+        <label>Observaciones</label>
+        <textarea name="observaciones" class="form-control" rows="4"></textarea>
+      </div>
+    </div>
+    <button type="submit" class="btn btn-success">Guardar Solicitud</button>
+    <a href="{{ url_for('main.listar_solicitudes') }}" class="btn btn-secondary">Cancelar</a>
+  </form>
+</div>
+{% endblock %}

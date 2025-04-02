@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block title %}Solicitudes de Subvención{% endblock %}
+{% block content %}
+<div class="container">
+    <h2>Listado de Solicitudes</h2>
+
+    <form method="get" class="row g-3 mb-3">
+        <div class="col-md-3">
+            <label for="entidad" class="form-label">Entidad</label>
+            <input type="text" name="entidad" id="entidad" class="form-control" value="{{ request.args.get('entidad', '') }}">
+        </div>
+        <div class="col-md-3">
+            <label for="estado" class="form-label">Estado</label>
+            <select name="estado" id="estado" class="form-select">
+                <option value="">Todos</option>
+                {% for e in estados %}
+                    <option value="{{ e }}" {% if request.args.get('estado') == e %}selected{% endif %}>{{ e }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label for="tipo_fondo" class="form-label">Tipo de Fondo</label>
+            <select name="tipo_fondo" id="tipo_fondo" class="form-select">
+                <option value="">Todos</option>
+                {% for tf in ['Fondos Europeos', 'Fondos Nacionales', 'Fondos Autonómicos', 'Fondos Provinciales', 'Otros'] %}
+                    <option value="{{ tf }}" {% if request.args.get('tipo_fondo') == tf %}selected{% endif %}>{{ tf }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label for="fecha" class="form-label">Fecha (año)</label>
+            <input type="text" name="fecha" id="fecha" class="form-control" placeholder="Ej. 2024" value="{{ request.args.get('fecha', '') }}">
+        </div>
+        <div class="col-12">
+            <button type="submit" class="btn btn-primary">Filtrar</button>
+            <a href="{{ url_for('main.listar_solicitudes') }}" class="btn btn-secondary">Limpiar</a>
+            <a href="{{ url_for('main.exportar_solicitudes_excel', entidad=request.args.get('entidad', ''), estado=request.args.get('estado', ''), tipo_fondo=request.args.get('tipo_fondo', ''), fecha=request.args.get('fecha', '')) }}" class="btn btn-outline-success">Exportar a Excel</a>
+            <a href="{{ url_for('main.nueva_solicitud') }}" class="btn btn-success float-end">+ Nueva Solicitud</a>
+        </div>
+    </form>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Entidad</th>
+                <th>Concepto</th>
+                <th>Tipo Fondo</th>
+                <th>Fecha</th>
+                <th>Estado</th>
+                <th>Importe Total</th>
+                <th>Importe Subvencionado</th>
+                <th>Fondos Propios</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for s in solicitudes %}
+                <tr>
+                    <td>{{ s.entidad.nombre if s.entidad else '' }}</td>
+                    <td>{{ s.concepto }}</td>
+                    <td>{{ s.tipo_fondo }}</td>
+                    <td>{{ s.fecha_solicitud or '' }}</td>
+                    <td>{{ s.estado }}</td>
+                    <td>{{ '{:,.2f} €'.format(s.importe_estimado or 0) }}</td>
+                    <td>{{ '{:,.2f} €'.format(s.importe_subvencionado or 0) }}</td>
+                    <td>{{ '{:,.2f} €'.format(s.fondos_propios or 0) }}</td>
+                    <td>
+                        <a href="{{ url_for('main.editar_solicitud', id=s.id) }}" class="btn btn-sm btn-primary">Editar</a>
+                        <a href="{{ url_for('main.eliminar_solicitud', id=s.id) }}" class="btn btn-sm btn-danger" onclick="return confirm('¿Estás seguro de eliminar esta solicitud?')">Eliminar</a>
+                        <a href="{{ url_for('main.ver_historial_solicitud', id=s.id) }}" class="btn btn-sm btn-secondary">Historial</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

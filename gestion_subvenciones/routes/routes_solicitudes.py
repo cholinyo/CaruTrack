@@ -4,9 +4,9 @@ from datetime import datetime
 import pandas as pd
 import os
 
-from app.models import db, SolicitudSubvencion, HistorialSolicitud, Entidad
+from .models import db, SolicitudSubvencion, HistorialSolicitud, Entidad
 
-solicitudes_bp = Blueprint('solicitudes', __name__)
+solicitudes_bp = Blueprint('solicitudes_bp', __name__)
 
 def rol_requerido(*roles):
     def decorator(func):

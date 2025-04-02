@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, abort
 from flask_login import login_required, current_user
-from ..models import db, Entidad
+from .models import db, Entidad
 
 entidades_bp = Blueprint('entidades_bp', __name__)
 

@@ -67,7 +67,7 @@
                     <td>
                         <a href="{{ url_for('main.editar_solicitud', id=s.id) }}" class="btn btn-sm btn-primary">Editar</a>
                         <a href="{{ url_for('main.eliminar_solicitud', id=s.id) }}" class="btn btn-sm btn-danger" onclick="return confirm('¿Estás seguro de eliminar esta solicitud?')">Eliminar</a>
-                        <a href="{{ url_for('main.ver_historial_solicitud', id=s.id) }}" class="btn btn-sm btn-secondary">Historial</a>
+                        <a href="{{ url_for('solicitudes_bp.ver_historial_solicitud', id=s.id) }}" class="btn btn-sm btn-secondary">Historial</a>
                     </td>
                 </tr>
             {% endfor %}

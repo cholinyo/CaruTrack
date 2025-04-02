@@ -1,38 +1,34 @@
-{# templates/entidades/listar.html #}
 {% extends 'base.html' %}
-{% block title %}Entidades{% endblock %}
 {% block content %}
 <div class="container mt-4">
-  <h2>Entidades</h2>
-  <a href="{{ url_for('entidades_bp.crear_entidad') }}" class="btn btn-success mb-3">Nueva Entidad</a>
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th>Nombre</th>
-        <th>Ámbito</th>
-        <th>Contactos</th>
-        <th>Acciones</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for entidad in entidades %}
-      <tr>
-        <td>{{ entidad.nombre }}</td>
-        <td>{{ entidad.ambito }}</td>
-        <td>
-          {% for contacto in entidad.contactos %}
-            <div>{{ contacto.nombre }} - {{ contacto.cargo }}<br>{{ contacto.telefono }} | {{ contacto.email }}</div>
-          {% endfor %}
-        </td>
-        <td>
-          <a href="{{ url_for('entidades_bp.editar_entidad', id=entidad.id) }}" class="btn btn-sm btn-primary">Editar</a>
-          <form action="{{ url_for('entidades_bp.eliminar_entidad', id=entidad.id) }}" method="post" class="d-inline">
-            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Estás seguro?')">Eliminar</button>
-          </form>
-        </td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+    <h2>Listado de Entidades</h2>
+    <a href="{{ url_for('entidades_bp.crear_entidad') }}" class="btn btn-success mb-3">➕ Nueva Entidad</a>
+    <table class="table table-bordered table-hover">
+        <thead class="thead-dark">
+            <tr>
+                <th>Nombre</th>
+                <th>Ámbito</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for entidad in entidades %}
+            <tr>
+                <td>{{ entidad.nombre }}</td>
+                <td>{{ entidad.ambito }}</td>
+                <td>
+                    <a href="{{ url_for('entidades_bp.editar_entidad', id=entidad.id) }}" class="btn btn-sm btn-outline-primary">✏️ Editar</a>
+                    <form action="{{ url_for('entidades_bp.eliminar_entidad', id=entidad.id) }}" method="POST" style="display:inline;">
+                        <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('¿Seguro que quieres eliminar esta entidad?')">🗑️ Eliminar</button>
+                    </form>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="3" class="text-center">No hay entidades registradas.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </div>
 {% endblock %}

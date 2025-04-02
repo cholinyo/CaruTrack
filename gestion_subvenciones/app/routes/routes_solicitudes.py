@@ -4,7 +4,10 @@ from datetime import datetime
 import pandas as pd
 import os
 
-from .models import db, SolicitudSubvencion, HistorialSolicitud, Entidad
+from app.models import db
+from app.models.solicitud import SolicitudSubvencion
+from app.models.historial import HistorialSolicitud
+from app.models.entidad import Entidad
 
 solicitudes_bp = Blueprint('solicitudes_bp', __name__)
 
@@ -22,7 +25,7 @@ def rol_requerido(*roles):
 @solicitudes_bp.route('/')
 @login_required
 def index():
-    return redirect(url_for('solicitudes.listar_solicitudes'))
+    return redirect(url_for('solicitudes_bp.listar_solicitudes'))
 
 @solicitudes_bp.route('/solicitudes')
 @login_required
@@ -67,19 +70,51 @@ def nueva_solicitud():
 
             db.session.commit()
             flash("Solicitud creada con éxito ✅")
-            return redirect(url_for('solicitudes.listar_solicitudes'))
+            return redirect(url_for('solicitudes_bp.listar_solicitudes'))
         except Exception as e:
             db.session.rollback()
             flash(f"❌ Error al guardar la solicitud: {str(e)}")
 
     return render_template('solicitudes/nueva_solicitud.html', entidades=entidades)
 
-@solicitudes_bp.route('/solicitudes/editar/<int:id>', methods=['GET'])
+@solicitudes_bp.route('/solicitudes/editar/<int:id>', methods=['GET', 'POST'])
 @login_required
 @rol_requerido('gestor')
 def editar_solicitud(id):
     solicitud = SolicitudSubvencion.query.get_or_404(id)
     entidades = Entidad.query.order_by(Entidad.nombre).all()
+
+    if request.method == 'POST':
+        try:
+            solicitud.expediente_opensea = request.form.get('expediente_opensea', solicitud.expediente_opensea)
+            solicitud.expediente_subvencion = request.form.get('expediente_subvencion', solicitud.expediente_subvencion)
+            solicitud.entidad_id = int(request.form.get('entidad_id')) if request.form.get('entidad_id') else solicitud.entidad_id
+            solicitud.concepto = request.form.get('concepto', solicitud.concepto)
+            solicitud.tipo_fondo = request.form.get('tipo_fondo', solicitud.tipo_fondo)
+            solicitud.fecha_presentacion_solicitud = datetime.strptime(request.form.get('fecha_presentacion_solicitud'), '%Y-%m-%d') if request.form.get('fecha_presentacion_solicitud') else solicitud.fecha_presentacion_solicitud
+            solicitud.importe_total = float(request.form.get('importe_total') or solicitud.importe_total)
+            solicitud.importe_subvencionado = float(request.form.get('importe_subvencionado') or solicitud.importe_subvencionado)
+            solicitud.fondos_propios = float(request.form.get('fondos_propios') or solicitud.fondos_propios)
+            solicitud.doc_inicio_expediente = 'doc_inicio_expediente' in request.form
+            solicitud.doc_informe_tecnico = 'doc_informe_tecnico' in request.form
+            solicitud.doc_propuesta_jgl = 'doc_propuesta_jgl' in request.form
+            solicitud.doc_ficha_captacion = 'doc_ficha_captacion' in request.form
+            solicitud.observaciones = request.form.get('observaciones', solicitud.observaciones)
+
+            historial = HistorialSolicitud(
+                solicitud_id=solicitud.id,
+                usuario=current_user.username,
+                descripcion="Solicitud actualizada"
+            )
+            db.session.add(historial)
+
+            db.session.commit()
+            flash("✅ Solicitud actualizada correctamente")
+            return redirect(url_for('solicitudes_bp.listar_solicitudes'))
+        except Exception as e:
+            db.session.rollback()
+            flash(f"❌ Error al actualizar la solicitud: {str(e)}")
+
     return render_template('solicitudes/editar_solicitud.html', solicitud=solicitud, entidades=entidades)
 
 @solicitudes_bp.route('/solicitudes/eliminar/<int:id>', methods=['POST'])
@@ -93,7 +128,7 @@ def eliminar_solicitud(id):
     except Exception as e:
         db.session.rollback()
         flash(f"Error al eliminar solicitud: {str(e)}")
-    return redirect(url_for('solicitudes.listar_solicitudes'))
+    return redirect(url_for('solicitudes_bp.listar_solicitudes'))
 
 @solicitudes_bp.route('/solicitudes/denegadas')
 @login_required

@@ -1,5 +1,5 @@
 from datetime import datetime
-from .. import db
+from app.models.db import db
 
 class SolicitudSubvencion(db.Model):
     id = db.Column(db.Integer, primary_key=True)

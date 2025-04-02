@@ -3,7 +3,7 @@ from app.config import Config
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 
-from app.models.db import db
+# from app.models.db import db
 from app.routes import main_bp
 from app.routes.routes_entidades import entidades_bp
 from app.routes.routes_solicitudes import solicitudes_bp

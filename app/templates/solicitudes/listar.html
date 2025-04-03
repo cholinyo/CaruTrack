@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}Lista de Solicitudes{% endblock %}
+
+{% block content %}
+<h1>Lista de Solicitudes</h1>
+
+<!-- Filtros de búsqueda -->
+<form method="GET" action="{{ url_for('solicitudes_bp.listar_solicitudes') }}" class="mb-3">
+    <div class="row">
+        <div class="col-md-4">
+            <input type="text" name="expediente_opensea" class="form-control" placeholder="Buscar por Expediente OpenSea" value="{{ request.args.get('expediente_opensea', '') }}">
+        </div>
+        <div class="col-md-4">
+            <select name="tipo_fondo" class="form-control">
+                <option value="">-- Tipo de Fondo --</option>
+                <option value="Fondos Europeos" {% if request.args.get('tipo_fondo') == 'Fondos Europeos' %}selected{% endif %}>Fondos Europeos</option>
+                <option value="Fondos Nacionales" {% if request.args.get('tipo_fondo') == 'Fondos Nacionales' %}selected{% endif %}>Fondos Nacionales</option>
+                <option value="Fondos Autonómicos" {% if request.args.get('tipo_fondo') == 'Fondos Autonómicos' %}selected{% endif %}>Fondos Autonómicos</option>
+                <option value="Fondos Provinciales" {% if request.args.get('tipo_fondo') == 'Fondos Provinciales' %}selected{% endif %}>Fondos Provinciales</option>
+                <option value="Otros" {% if request.args.get('tipo_fondo') == 'Otros' %}selected{% endif %}>Otros</option>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <button type="submit" class="btn btn-primary">Buscar</button>
+            <a href="{{ url_for('solicitudes_bp.listar_solicitudes', export='excel') }}" class="btn btn-success">Exportar a Excel</a>
+        </div>
+    </div>
+</form>
+
+<!-- Tabla de solicitudes -->
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Expediente OpenSea</th>
+            <th>Tipo Fondo</th>
+            <th>Fecha Solicitud</th>
+            <th>Importe Total</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for solicitud in solicitudes %}
+        <tr>
+            <td>{{ solicitud.id }}</td>
+            <td>{{ solicitud.expediente_opensea }}</td>
+            <td>{{ solicitud.tipo_fondo }}</td>
+            <td>{{ solicitud.fecha_solicitud }}</td>
+            <td>{{ solicitud.importe_total_proyecto }}</td>
+            <td>
+                <a href="{{ url_for('solicitudes_bp.ver_solicitud', id=solicitud.id) }}" class="btn btn-info btn-sm">Ver</a>
+                {% if current_user.rol in ['gestor', 'administrador'] %}
+                <a href="{{ url_for('solicitudes_bp.editar_solicitud', id=solicitud.id) }}" class="btn btn-warning btn-sm">Editar</a>
+                {% endif %}
+                {% if current_user.rol == 'administrador' %}
+                <form method="POST" action="{{ url_for('solicitudes_bp.eliminar_solicitud', id=solicitud.id) }}" style="display:inline;">
+                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de eliminar esta solicitud?')">Eliminar</button>
+                </form>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

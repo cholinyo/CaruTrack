@@ -1,1 +1,0 @@
-# Este archivo puede eliminarse o mantenerse vacío si no se necesita.

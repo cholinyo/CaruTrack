@@ -1,33 +1,30 @@
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
-from flask_bootstrap import Bootstrap
+from app.config import Config
+from app.models.db import db
+from app.routes import main_bp
+from app.routes.routes_entidades import entidades_bp
+from app.routes.routes_usuarios import usuarios_bp
+# ...otros blueprints
 
-# Inicializar extensiones
-db = SQLAlchemy()
 login_manager = LoginManager()
+login_manager.login_view = 'usuarios_bp.login'
 
-
-def create_app(config_class='config.Config'):
+def create_app():
     app = Flask(__name__)
-    app.config.from_object(config_class)
+    app.config.from_object(Config)
 
-    # Inicializar extensiones
     db.init_app(app)
     login_manager.init_app(app)
-    Bootstrap(app)
 
-    # Registrar blueprints
-    from app.routes import register_blueprints
-    register_blueprints(app)
+    from app.models.usuario import Usuario
+    @login_manager.user_loader
+    def load_user(user_id):
+        return Usuario.query.get(int(user_id))
+
+    app.register_blueprint(main_bp)
+    app.register_blueprint(entidades_bp)
+    app.register_blueprint(usuarios_bp)
+    # ...otros blueprints
 
     return app
-
-def register_blueprints(app):
-    from app.routes.routes_solicitudes import solicitudes_bp
-    from app.routes.routes_auth import auth_bp
-    from app.routes.routes_main import main_bp  # Importar el blueprint de la página principal
-
-    app.register_blueprint(solicitudes_bp)
-    app.register_blueprint(auth_bp)
-    app.register_blueprint(main_bp)  # Registrar el blueprint

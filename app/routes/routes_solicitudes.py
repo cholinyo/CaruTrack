@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, send_file
 from flask_login import login_required, current_user
-from app.models.solicitud import Solicitud
+from app.models.SolicitudSubvencion import Solicitud
 from app.models.db import db
 import csv
 import io

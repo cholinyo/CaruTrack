@@ -1,6 +1,6 @@
 import os
 
 class Config:
-    SECRET_KEY = os.environ.get('SECRET_KEY', 'default_secret_key')
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', 'sqlite:///carutrack.db')
-    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SECRET_KEY = 'your_secret_key'
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///Carutrack.db'  # Ruta a la base de datos SQLite
+SQLALCHEMY_TRACK_MODIFICATIONS = False

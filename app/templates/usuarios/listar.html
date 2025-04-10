@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Listado de Usuarios</h2>
+    <a href="{{ url_for('usuarios_bp.crear_usuario') }}" class="btn btn-success mb-3">➕ Nuevo Usuario</a>
+    <table class="table table-bordered table-hover">
+        <thead class="thead-dark">
+            <tr>
+                <th>Nombre de Usuario</th>
+                <th>Rol</th>
+                <th>Email</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for usuario in usuarios %}
+            <tr>
+                <td>{{ usuario.username }}</td>
+                <td>{{ usuario.rol }}</td>
+                <td>{{ usuario.email or '-' }}</td>
+                <td>
+                    {% if current_user.rol == 'admin' or current_user.rol == 'gestor' %}
+                    <a href="{{ url_for('usuarios_bp.editar_usuario', id=usuario.id) }}" class="btn btn-sm btn-outline-primary">✏️ Editar</a>
+                    {% endif %}
+                    {% if current_user.rol == 'admin' %}
+                    <form action="{{ url_for('usuarios_bp.eliminar_usuario', id=usuario.id) }}" method="POST" style="display:inline;">
+                        <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('¿Seguro que quieres eliminar este usuario?')">🗑️ Eliminar</button>
+                    </form>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

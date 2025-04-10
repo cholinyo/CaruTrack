@@ -1,4 +1,4 @@
-# Ruta: app/models/historial_solicitud.py
+# app/models/historial_solicitud.py
 
 from datetime import datetime
 from app.models.db import db
@@ -12,5 +12,5 @@ class HistorialSolicitud(db.Model):
     fecha = db.Column(db.DateTime, default=datetime.utcnow)
     descripcion = db.Column(db.Text, nullable=False)
 
+    # Relación inversa (acceso desde la solicitud)
     solicitud = db.relationship('SolicitudSubvencion', back_populates='historial')
-

@@ -34,7 +34,7 @@ def create_app():
     from app.routes.routes_main import main_bp
     from app.routes.routes_usuarios import usuarios_bp
     from app.routes.routes_entidades import entidades_bp
-    from app.routes.routes_solicitudes import solicitudes_bp
+    from app.routes.routes_solicitud_subvencion import solicitudes_bp
     from app.routes.routes_subvenciones import subvenciones_bp
     from app.routes.routes_historial import historial_bp
 

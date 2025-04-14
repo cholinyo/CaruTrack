@@ -30,19 +30,20 @@ def create_app():
     login_manager.init_app(app)
     Migrate(app, db)
 
-    # Registrar blueprints (rutas divididas por funcionalidad)
-    from app.routes.routes_main import main_bp
-    from app.routes.routes_usuarios import usuarios_bp
-    from app.routes.routes_entidades import entidades_bp
-    from app.routes.routes_solicitud_subvencion import solicitudes_bp
-    from app.routes.routes_subvenciones import subvenciones_bp
-    from app.routes.routes_historial import historial_bp
+    # Registrar blueprints después de inicializar la app
+    with app.app_context():
+        from app.routes.routes_main import main_bp
+        from app.routes.routes_usuarios import usuarios_bp
+        from app.routes.routes_entidades import entidades_bp
+        from app.routes.routes_solicitud_subvencion import solicitudes_bp
+        from app.routes.routes_subvenciones import subvenciones_bp
+        from app.routes.routes_historial import historial_bp
 
-    app.register_blueprint(main_bp)
-    app.register_blueprint(usuarios_bp)
-    app.register_blueprint(entidades_bp)
-    app.register_blueprint(solicitudes_bp)
-    app.register_blueprint(subvenciones_bp)
-    app.register_blueprint(historial_bp)
+        app.register_blueprint(main_bp)
+        app.register_blueprint(usuarios_bp)
+        app.register_blueprint(entidades_bp)
+        app.register_blueprint(solicitudes_bp)
+        app.register_blueprint(subvenciones_bp)
+        app.register_blueprint(historial_bp)
 
     return app

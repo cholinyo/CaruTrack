@@ -5,6 +5,8 @@ from app.models.db import db
 from app.routes import main_bp
 from app.routes.routes_entidades import entidades_bp
 from app.routes.routes_usuarios import usuarios_bp
+from app.routes.routes_solicitud_subvencion import solicitud_subvencion_bp
+
 # ...otros blueprints
 
 login_manager = LoginManager()
@@ -28,3 +30,7 @@ def create_app():
     # ...otros blueprints
 
     return app
+
+def get_main_bp():
+    from app.routes.routes_main import main_bp
+    return main_bp

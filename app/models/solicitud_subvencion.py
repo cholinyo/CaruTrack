@@ -43,3 +43,11 @@ class SolicitudSubvencion(db.Model):
 
     def esta_bloqueada(self):
         return self.estado in ["No solicitada", "Concedida", "Denegada"]
+
+if solicitud.esta_bloqueada():
+    flash("❌ Esta solicitud está bloqueada y no puede modificarse", "warning")
+    return redirect(url_for('solicitud_bp.listar_solicitudes'))
+
+if nuevo_estado == 'Solicitada' and not solicitud.documentos_completos():
+    flash("❌ No se puede cambiar a 'Solicitada' sin toda la documentación", 'danger')
+    return render_template('solicitudes/editar.html', solicitud=solicitud, entidades=entidades)

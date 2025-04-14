@@ -7,9 +7,6 @@ from .usuario import Usuario
 from .entidad import Entidad
 # Ensure the module exists or adjust the import path
 try:
-	from .solicitud_subvencion import SolicitudSubvencion
-
+	from .solicitud_subvencion import Solicitud	
 except ImportError:
 	print("Module 'SolicitudSubvencion' not found. Please verify its existence and path.")
-#from .subvencion import Subvencion
-from .red import Red

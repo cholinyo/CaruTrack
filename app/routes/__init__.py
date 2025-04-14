@@ -31,6 +31,3 @@ def create_app():
 
     return app
 
-def get_main_bp():
-    from app.routes.routes_main import main_bp
-    return main_bp
